@@ -76,8 +76,8 @@
                 <select id="chosenCharacter">
                     <option>B</option>
                     <option>G</option>
-                    <option>S</option>
-                    <option>M</option>
+                    <option>$</option>
+                    <option>#</option>
                     <option>7</option>
                     <option>4</option>
                 </select>
@@ -155,7 +155,7 @@
         var players = [];
 
         var symbols =
-            ["B", "G", "S", "M", "7", "4"];
+            ["B", "G", "$", "#", "7", "4"];
 
 
         function startGame() {
@@ -249,7 +249,7 @@
 
             if (position == correctPosition) {
 
-                score = score + 1;
+                score = score + 3;
             }
             else {
 
