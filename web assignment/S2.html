@@ -129,7 +129,7 @@
       weatherObj.weather.sort(function(a, b) {
         var dateA = new Date(parseInt(a.year), parseInt(a.month) - 1, parseInt(a.date));
         var dateB = new Date(parseInt(b.year), parseInt(b.month) - 1, parseInt(b.date));
-        return dateA - dateB; // Earliest dates appear at the top of the table
+        return dateB - dateA; // Earliest dates appear at the top of the table
       });
 
       // Build the table markup string starting with the title header
@@ -162,7 +162,7 @@
             html += "<div class='weather-container'>";
             
             // Temperature ordered lowest to highest at the top of the cell
-            html += "<div class='temp-range'>" + item.lowest + "° - " + item.highest + "°</div>";
+            html += "<div class='temp-range'>" + item.highest + "° - " + item.lowest + "°</div>";
             
             // Weather icon loaded dynamically from the 'A2 Resources' folder using .jpeg format
             html += "<img class='weather-icon' src='A2 Resources/" + item.overallCode + ".jpeg' alt='" + item.overallCode + "' />";
