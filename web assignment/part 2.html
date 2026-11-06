@@ -73,7 +73,7 @@
             <td>
                 <b>Your chosen character:</b>
 
-                <select id="chosenCharacter">
+                <select id="chosenCharacter" disabled>
                     <option>B</option>
                     <option>G</option>
                     <option>$</option>
@@ -154,8 +154,26 @@
 
         var players = [];
 
-        var symbols =
-            ["B", "G", "$", "#", "7", "4"];
+        var symbols =["B", "G", "$", "#", "7", "4"];
+
+        var nameInput = document.getElementById("playerName");
+        var chosenCharacter = document.getElementById("chosenCharacter");
+        var startButton = document.getElementById("startButton");
+        var stopButton = document.getElementById("stopButton");
+
+        function updateControls() {
+            var hasName = nameInput.value.trim() !== "";
+
+            nameInput.disabled = gameStarted;
+
+            startButton.disabled = !hasName || gameStarted;
+            chosenCharacter.disabled = !hasName || gameStarted;
+
+            stopButton.disabled = !gameStarted;
+        }
+
+        nameInput.addEventListener("input", updateControls);
+        updateControls();
 
 
         function startGame() {
@@ -183,6 +201,7 @@
                 setInterval(generateCharacters, 2000);
 
             gameStarted = true;
+            updateControls();
         }
 
 
@@ -288,6 +307,7 @@
             });
 
             displayResults();
+            updateControls();
         }
 
 
