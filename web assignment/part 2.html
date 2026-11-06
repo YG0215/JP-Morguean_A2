@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Part 2 Game</title>
+
+    <style>
+        body {
+            font-family: Arial;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 800px;
+            margin: auto;
+        }
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        .header {
+            background-color: #e8bf9f;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .green {
+            background-color: lightgreen;
+            text-align: center;
+        }
+
+        .score {
+            color: red;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .character {
+            font-size: 40px;
+            text-align: center;
+            cursor: pointer;
+            width: 33%;
+        }
+
+        ul {
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table>
+
+        <tr>
+            <th colspan="2" class="header">
+                Part 2: Game
+            </th>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <b>Name:</b>
+                <input type="text" id="playerName">
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Your chosen character:</b>
+
+                <select id="chosenCharacter">
+                    <option>B</option>
+                    <option>G</option>
+                    <option>S</option>
+                    <option>M</option>
+                    <option>7</option>
+                    <option>4</option>
+                </select>
+            </td>
+
+            <td>
+                <b>Current Score:</b>
+                <span id="score" class="score">0</span>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="green">
+                <button onclick="startGame()">
+                    Start Game
+                </button>
+            </td>
+
+            <td class="green">
+                <button onclick="stopGame()">
+                    Stop Game
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+
+                <table style="width:100%; border:none;">
+                    <tr>
+
+                        <td id="char0"
+                            class="character"
+                            onclick="checkCharacter(0)">
+                        </td>
+
+                        <td id="char1"
+                            class="character"
+                            onclick="checkCharacter(1)">
+                        </td>
+
+                        <td id="char2"
+                            class="character"
+                            onclick="checkCharacter(2)">
+                        </td>
+
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Player (Score)
+            </td>
+
+            <td>
+                <ul id="resultList"></ul>
+            </td>
+        </tr>
+
+    </table>
+
+    <script>
+
+        var score = 0;
+
+        var timer;
+
+        var correctPosition = 0;
+
+        var gameStarted = false;
+
+        var players = [];
+
+        var symbols =
+            ["B", "G", "S", "M", "7", "4"];
+
+
+        function startGame() {
+
+            var playerName =
+                document.getElementById("playerName").value;
+
+            if (playerName == null ||
+                playerName.trim() == "") {
+
+                alert("Please enter your name");
+                return;
+            }
+
+            clearInterval(timer);
+
+            score = 0;
+
+            document.getElementById("score").innerHTML =
+                score;
+
+            generateCharacters();
+
+            timer =
+                setInterval(generateCharacters, 2000);
+
+            gameStarted = true;
+        }
+
+
+        function generateCharacters() {
+
+            var target =
+                document.getElementById("chosenCharacter")
+                    .value;
+
+            var available = [];
+
+            for (var i = 0; i < symbols.length; i++) {
+
+                if (symbols[i] != target) {
+                    available.push(symbols[i]);
+                }
+
+            }
+
+            var display = [];
+
+            correctPosition =
+                Math.floor(Math.random() * 3);
+
+            display[correctPosition] = target;
+
+            while (display.filter(Boolean).length < 3) {
+
+                var randomIndex =
+                    Math.floor(Math.random() * available.length);
+
+                var randomCharacter =
+                    available[randomIndex];
+
+                if (!display.includes(randomCharacter)) {
+
+                    for (var j = 0; j < 3; j++) {
+
+                        if (display[j] == undefined) {
+
+                            display[j] = randomCharacter;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            document.getElementById("char0").innerHTML =
+                display[0];
+
+            document.getElementById("char1").innerHTML =
+                display[1];
+
+            document.getElementById("char2").innerHTML =
+                display[2];
+        }
+
+
+        function checkCharacter(position) {
+
+            if (!gameStarted) {
+                return;
+            }
+
+            if (position == correctPosition) {
+
+                score = score + 1;
+            }
+            else {
+
+                score = score - 2;
+            }
+
+            document.getElementById("score").innerHTML =
+                score;
+        }
+
+
+        function stopGame() {
+
+            if (!gameStarted) {
+                return;
+            }
+
+            clearInterval(timer);
+
+            gameStarted = false;
+
+            var playerName =
+                document.getElementById("playerName").value;
+
+            players.push({
+
+                name: playerName,
+                score: score
+
+            });
+
+            players.sort(function (a, b) {
+
+                return a.score - b.score;
+
+            });
+
+            displayResults();
+        }
+
+
+        function displayResults() {
+
+            var resultList =
+                document.getElementById("resultList");
+
+            resultList.innerHTML = "";
+
+            for (var i = 0; i < players.length; i++) {
+
+                var li =
+                    document.createElement("li");
+
+                li.innerHTML =
+                    players[i].name +
+                    " (" +
+                    players[i].score +
+                    ")";
+
+                resultList.appendChild(li);
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
