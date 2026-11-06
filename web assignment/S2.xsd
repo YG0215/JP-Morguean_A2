@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Root Element Declaration -->
+  <xsd:element name="forecastList">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="queryTime" type="xsd:string"/>
+        
+        <!-- Weather element can occur zero or more times -->
+        <xsd:element name="weather" minOccurs="0" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              
+              <!-- Year restriction: 2000 to 2030 -->
+              <xsd:element name="year">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="2000"/>
+                    <xsd:maxInclusive value="2030"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+
+              <!-- Month restriction: 1 to 12 -->
+              <xsd:element name="month">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="1"/>
+                    <xsd:maxInclusive value="12"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+
+              <!-- Date restriction: 1 to 31 -->
+              <xsd:element name="date">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:integer">
+                    <xsd:minInclusive value="1"/>
+                    <xsd:maxInclusive value="31"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+
+              <!-- Day of week restriction: specific valid days -->
+              <xsd:element name="dayOfWeek">
+                <xsd:simpleType>
+                  <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Mon"/>
+                    <xsd:enumeration value="Tue"/>
+                    <xsd:enumeration value="Wed"/>
+                    <xsd:enumeration value="Thu"/>
+                    <xsd:enumeration value="Fri"/>
+                    <xsd:enumeration value="Sat"/>
+                    <xsd:enumeration value="Sun"/>
+                  </xsd:restriction>
+                </xsd:simpleType>
+              </xsd:element>
+
+              <!-- Standard text and integer elements -->
+              <xsd:element name="overall" type="xsd:string"/>
+              <xsd:element name="overallCode" type="xsd:string"/>
+              <xsd:element name="highest" type="xsd:integer"/>
+              <xsd:element name="lowest" type="xsd:integer"/>
+
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+</xsd:schema>

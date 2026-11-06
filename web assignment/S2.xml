@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone= "yes" ?>
+
+<forecastList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="S2.xsd">
+    <queryTime>13/10/2026 10:52:00</queryTime>
+    <weather>
+        <year>2026</year>
+        <month>2</month>
+        <date>22</date>
+        <dayOfWeek>Sun</dayOfWeek>
+        <overall>Considerable clouds 20</overall>
+        <overallCode>cloudy</overallCode>
+        <highest>34</highest>
+        <lowest>30</lowest>
+    </weather>
+    <weather>
+        <year>2026</year>
+        <month>6</month>
+        <date>15</date>
+        <dayOfWeek>Mon</dayOfWeek>
+        <overall>Cloudy with a thunderstorm 26</overall>
+        <overallCode>thunderstorm</overallCode>
+        <highest>30</highest>
+        <lowest>25</lowest>
+    </weather>
+    <weather>
+        <year>2026</year>
+        <month>4</month>
+        <date>14</date>
+        <dayOfWeek>Tue</dayOfWeek>
+        <overall>Afternoon shower 10</overall>
+        <overallCode>rain</overallCode>
+        <highest>36</highest>
+        <lowest>31</lowest>
+    </weather>
+    <weather>
+        <year>2026</year>
+        <month>7</month>
+        <date>9</date>
+        <dayOfWeek>Thu</dayOfWeek>
+        <overall>A morning shower, then rain 13</overall>
+        <overallCode>rain</overallCode>
+        <highest>34</highest>
+        <lowest>29</lowest>
+    </weather>
+    <weather>
+        <year>2026</year>
+        <month>5</month>
+        <date>9</date>
+        <dayOfWeek>Sat</dayOfWeek>
+        <overall>Partly sunny</overall>
+        <overallCode>partlySunny</overallCode>
+        <highest>34</highest>
+        <lowest>30</lowest>
+    </weather>
+    <weather>
+        <year>2026</year>
+        <month>5</month>
+        <date>18</date>
+        <dayOfWeek>Mon</dayOfWeek>
+        <overall>Plenty of sunshine 2026</overall>
+        <overallCode>sunny</overallCode>
+        <highest>35</highest>
+        <lowest>32</lowest>
+    </weather>
+

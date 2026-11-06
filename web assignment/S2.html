@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Character encoding definition ensuring symbols like degrees (°) render properly -->
+  <meta charset="UTF-8">
+  <title>Part 3: Weather Calendar</title>
+  <style>
+    /* Global page layout styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    
+    /* Main table styling with fixed layout for uniform column dimensions */
+    table {
+      border: 1px solid black;   /* Table outline border */
+      width: 100%;
+      table-layout: fixed;       /* Forces columns to equal widths */
+      border-collapse: collapse; /* Merges borders into clean single lines */
+    }
+
+    /* Individual cell styling for headers and data cells */
+    th, td {
+      border: 1px solid black;   /* Grid lines for every cell */
+      padding: 8px;              /* Internal padding for spacious cells */
+      text-align: center;
+      vertical-align: middle;
+      width: 11.11%;             /* Divides 100% equally across 9 columns (Date + 7 days) */
+      min-height: 130px;         /* Minimum height for taller cells */
+      height: 130px;             /* Enforces a uniform height across rows */
+      word-wrap: break-word;     /* Prevents text overflow */
+    }
+
+    /* Yellow background for the header row and first column (dates) */
+    tr:first-child th, 
+    td:first-child {
+      background-color: yellow;
+    }
+
+    /* Bold font weight for table header text */
+    tr:first-child th {
+      font-weight: bold;
+    }
+
+    /* Subtitle header spacing */
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    /* Flexbox container for aligning items vertically inside each weather cell */
+    .weather-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    /* Temperature text display style */
+    .temp-range {
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    /* Weather image icon dimensions */
+    .weather-icon {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin: 2px 0;
+    }
+
+    /* Weather description text typography */
+    .weather-desc {
+      font-size: 11px;
+      line-height: 1.1;
+      font-weight: bold;
+    }
+
+    /* Color coding rules for specific weather descriptions */
+    .cloudy { color: blue; }
+    .thunderstorm { color: orange; }
+    .rain { color: lime; }
+    .sunny, .partlySunny { color: red; }
+
+    /* Action button styling */
+    button {
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Button to trigger the AJAX data fetch -->
+  <button onclick="getWeatherAjax()">Click here to view Weather Forecast</button>
+  
+  <!-- Container where the generated weather table will be inserted -->
+  <div id="weatherDiv"></div>
+
+  <script>
+    // Function to initialize the XMLHttpRequest for fetching A2.json
+    function getWeatherAjax() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          processResult(xhttp);
+        }
+      };
+      xhttp.open("GET", "A2.json", true);
+      xhttp.send();
+    }
+
+    // Function to parse the incoming JSON response text
+    function processResult(xhttp) {
+      var jsonText = xhttp.responseText;
+      var weatherObj = JSON.parse(jsonText);
+      displayWeather(weatherObj);
+    }
+
+    // Function to process weather data, sort it, and build the dynamic HTML table
+    function displayWeather(weatherObj) {
+      var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      var daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+      // Sort forecasts in ascending order from earliest date to latest date
+      weatherObj.weather.sort(function(a, b) {
+        var dateA = new Date(parseInt(a.year), parseInt(a.month) - 1, parseInt(a.date));
+        var dateB = new Date(parseInt(b.year), parseInt(b.month) - 1, parseInt(b.date));
+        return dateA - dateB; // Earliest dates appear at the top of the table
+      });
+
+      // Build the table markup string starting with the title header
+      var html = "<h2>Singapore [" + weatherObj.queryTime + "]</h2>";
+      html += "<table>";
+      
+      // Construct the table header row (Date column + Mon-Sun columns)
+      html += "<tr>";
+      html += "<th>Date</th>";
+      for (var i = 0; i < daysOfWeek.length; i++) {
+        html += "<th>" + daysOfWeek[i] + "</th>";
+      }
+      html += "</tr>";
+
+      // Loop through each weather record to create table rows
+      for (var k = 0; k < weatherObj.weather.length; k++) {
+        var item = weatherObj.weather[k];
+        var dateFormatted = item.date + " " + monthNames[parseInt(item.month) - 1];
+
+        html += "<tr>";
+        // First column: Formatted date string
+        html += "<td>" + dateFormatted + "</td>";
+
+        // Columns for Monday through Sunday matching the record's day of the week
+        for (var d = 0; d < daysOfWeek.length; d++) {
+          if (daysOfWeek[d] === item.dayOfWeek) {
+            var colorClass = item.overallCode;
+
+            html += "<td>";
+            html += "<div class='weather-container'>";
+            
+            // Temperature ordered lowest to highest at the top of the cell
+            html += "<div class='temp-range'>" + item.lowest + "° - " + item.highest + "°</div>";
+            
+            // Weather icon loaded dynamically from the 'A2 Resources' folder using .jpeg format
+            html += "<img class='weather-icon' src='A2 Resources/" + item.overallCode + ".jpeg' alt='" + item.overallCode + "' />";
+            
+            // Weather description text at the bottom with its assigned condition color class
+            html += "<div class='weather-desc " + colorClass + "'>" + item.overall + "</div>";
+            
+            html += "</div>";
+            html += "</td>";
+          } else {
+            // Empty cell rendered for non-matching days of the week
+            html += "<td></td>"; 
+          }
+        }
+        html += "</tr>";
+      }
+
+      html += "</table>";
+
+      // Inject the completed HTML string into the target DOM container
+      document.getElementById("weatherDiv").innerHTML = html;
+    }
+  </script>
+</body>
+</html>
